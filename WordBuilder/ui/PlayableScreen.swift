@@ -9,10 +9,16 @@ import SwiftUI
 
 struct PlayableScreen: View {
     @EnvironmentObject var viewRouter: ViewRouter
+    var word: [String] = ["hello", "holla"]
+    var letters: Array<Any> {
+        get {
+            return Array(Set(word.joined()))
+        }
+    }
     
     var body: some View {
         NavigationView {
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            Text("\(letters)" as String)
                 .navigationBarTitle("Play", displayMode: .inline)
                 .navigationBarItems(
                     leading: Button(
