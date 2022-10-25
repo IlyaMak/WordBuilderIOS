@@ -1,0 +1,6 @@
+framework module Pods_WordBuilder {
+  umbrella header "Pods-WordBuilder-umbrella.h"
+
+  export *
+  module * { export * }
+}

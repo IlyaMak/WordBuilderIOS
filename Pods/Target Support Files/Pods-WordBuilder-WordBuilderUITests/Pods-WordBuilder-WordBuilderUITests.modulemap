@@ -1,0 +1,6 @@
+framework module Pods_WordBuilder_WordBuilderUITests {
+  umbrella header "Pods-WordBuilder-WordBuilderUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
