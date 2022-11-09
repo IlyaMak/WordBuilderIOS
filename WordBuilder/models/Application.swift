@@ -6,9 +6,22 @@
 //
 
 import Foundation
+import RealmSwift
 
-struct Application: Identifiable, Decodable {
-    var id: Int
-    var name: String
-    var token: String
+//class Application: Codable {
+//    var id: Int
+//    var name: String
+//    var token: String
+//
+//    init(id: Int, name: String, token: String) {
+//        self.id = id
+//        self.name = name
+//        self.token = token
+//    }
+//}
+
+class Application: Object, Identifiable  {
+    @Persisted(primaryKey: true) var _id: Int
+    @Persisted var name: String
+    @Persisted var token: String
 }

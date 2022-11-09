@@ -6,16 +6,18 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 struct LevelScreen: View {
-//    @EnvironmentObject var network: Network
     @EnvironmentObject var viewRouter: ViewRouter
     @State var levels: [Level] = []
+    @ObservedResults(Application.self) var applications
     
     var body: some View {
+        
         NavigationView {
             VStack {
-                
+
                 List(levels) { level in
                     Text("All users").font(.title).bold()
 
@@ -40,7 +42,7 @@ struct LevelScreen: View {
                     }
                 }
                 
-                Text("1 level").padding()
+                Text("\(applications.first?._id) \(applications.first?.name) \(applications.first?.token)" as String).padding()
                     .navigationBarTitle("Levels", displayMode: .inline)
                     .navigationBarItems(
                         trailing: Button(
@@ -79,6 +81,5 @@ struct LevelScreen: View {
 struct Level_Previews: PreviewProvider {
     static var previews: some View {
         LevelScreen().environmentObject(ViewRouter())
-//        LevelScreen().environmentObject(Network())
     }
 }

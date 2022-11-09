@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 struct Registration: View {
     @State private var name = ""
@@ -17,6 +18,14 @@ struct Registration: View {
             TextField("Enter your name", text: $name).textFieldStyle(RoundedBorderTextFieldStyle()).padding()
                     
             Button(action: {
+                let application = Application()
+                application.name = name
+                application.token = "1234567890"
+                
+                let realm = try! Realm()
+                try! realm.write {
+                    realm.add(application)
+                }
                 withAnimation {
                     viewRouter.currentPage = .page2
                 }

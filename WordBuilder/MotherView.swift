@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 struct MotherView: View {
     
     @EnvironmentObject var viewRouter: ViewRouter
+//    @ObservedResults(Application.self) var applications
     
     var body: some View {
         switch viewRouter.currentPage {
@@ -27,7 +29,7 @@ struct MotherView: View {
         }
     }
 }
-
+    
 struct MotherView_Previews: PreviewProvider {
     static var previews: some View {
         MotherView().environmentObject(ViewRouter())
