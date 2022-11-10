@@ -9,18 +9,29 @@ import SwiftUI
 
 struct LeaderboardScreen: View {
     @EnvironmentObject var viewRouter: ViewRouter
-//    @EnvironmentObject var network: Network
+    @State var leaders: [Leader] = []
     
     var body: some View {
         NavigationView {
-            ScrollView {
-//                ForEach(network.leaders, id: \.id) { leader in
-//                    Text("\(leader.id)")
-//                }
-            }
-//            .onAppear {
-//                network.getLeaders()
-//            }
+            VStack {
+                List(leaders) { leader in
+                    VStack {
+                        HStack {
+                            Text("\(leader.id)").bold()
+                            Text(leader.name)
+                        }
+                        Text("\(leader.amountOfWords)")
+                    }
+                    .frame(width: 280, alignment: .leading)
+                    .padding()
+                    .background(Color.yellow)
+                    .cornerRadius(10)
+                }
+                .onAppear {
+                    Network().getLeaders { (leaders) in
+                        self.leaders = leaders
+                    }
+                }
                 .navigationBarTitle("Leaderboard", displayMode: .inline)
                 .navigationBarItems(
                     leading: Button(
@@ -42,6 +53,7 @@ struct LeaderboardScreen: View {
                         }
                     )
                 )
+            }
         }
     }
 }
@@ -49,6 +61,5 @@ struct LeaderboardScreen: View {
 struct LeaderboardScreen_Previews: PreviewProvider {
     static var previews: some View {
         LeaderboardScreen().environmentObject(ViewRouter())
-//        LeaderboardScreen().environmentObject(Network())
     }
 }

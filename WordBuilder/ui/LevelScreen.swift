@@ -14,13 +14,10 @@ struct LevelScreen: View {
     @ObservedResults(Application.self) var applications
     
     var body: some View {
-        
         NavigationView {
             VStack {
-
                 List(levels) { level in
                     Text("All users").font(.title).bold()
-
                             VStack {
                                 VStack(alignment: .leading) {
                                     Text("\(level.number)").bold()
@@ -30,11 +27,10 @@ struct LevelScreen: View {
                                     Text("\(level.totalCompletions)")
                                 }
                             }
-                            .frame(width: 300, alignment: .leading)
+                            .frame(width: 150, alignment: .leading)
                             .padding()
                             .background(Color.yellow)
                             .cornerRadius(20)
-
                 }
                 .onAppear {
                     Network().getLevels { (levels) in
@@ -71,7 +67,7 @@ struct LevelScreen: View {
                                         .cornerRadius(10)
                                         .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                                 )
-                        }
+                }
                 )
             }
         }
