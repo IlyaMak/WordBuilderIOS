@@ -32,22 +32,24 @@ struct PlayableScreen: View {
 //            }
 //        }
     
-    var arrayLetters: [String] {
-        get {
-            var letters = [String]()
-            for word in words {
-                for letter in word {
-                    letters.append(String(letter))
-                }
-            }
-            return letters
-        }
-    }
+    var arrayLetters: [String]
+//    {
+//        get {
+//            var letters = [String]()
+//            for word in words {
+//                for letter in word {
+//                    letters.append(String(letter))
+//                }
+//            }
+//            return letters
+//        }
+//    }
     
-    var letters: [String] {
-        get {
-            NSOrderedSet(array: arrayLetters.shuffled()).array as! [String]
-        }
+    var letters: [String]
+    
+    init() {
+        arrayLetters = words.joined().map{String($0)}
+        letters = NSOrderedSet(array: arrayLetters.shuffled()).array as! [String]
     }
     
     func handleLetterButtonPressed(letter: String) -> Void {
@@ -107,21 +109,21 @@ struct PlayableScreen: View {
         NavigationView {
             VStack {
                 VStack {
-                    ForEach(words.indices) { word in
+                    ForEach(words.indices) { wordIndex in
                         HStack {
-                            ForEach(Array(words[word]), id: \.self) { letter in
+                            ForEach(Array(words[wordIndex]), id: \.self) { letter in
                                 Rectangle()
                                     .foregroundColor(.white)
                                     .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
                                     .cornerRadius(3)
                                     .frame(width: 50, height: 50)
-                                    .overlay(Text("\(letter)" as String))
+                                    .overlay(Text(!guessedWordIndices.contains(wordIndex) ? "" : "\(letter)" as String))
                             }
                                 
                         }
                     }
                 }
-                Text("\(letters)" as String)
+                
                 VStack {
                     Text(enteredWord).fontWeight(.bold)
                     getLetterPicker()
