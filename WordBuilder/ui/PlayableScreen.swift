@@ -14,15 +14,10 @@ struct PlayableScreen: View {
     let maxWordLengthMinValue = 5
     let letterButtonSizePercent = 0.1
     @EnvironmentObject var viewRouter: ViewRouter
-    var words: [String] = ["hello", "holla"]
+    var words: [String] = ["cow", "low", "bow", "bowl", "row"]
     @State var enteredWord = ""
     @State var guessedWordIndices: Set<Int> = []
     @State var maxWordLength: Int = 0
-//    var letters: [String] {
-//        get {
-//            return Array(Set(words.joined().map{String($0)}))
-//        }
-//    }
     
 //    var letters: [String] {
 //            get {
@@ -117,7 +112,7 @@ struct PlayableScreen: View {
                                     .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
                                     .cornerRadius(3)
                                     .frame(width: 50, height: 50)
-                                    .overlay(Text(!guessedWordIndices.contains(wordIndex) ? "" : "\(letter)" as String))
+                                    .overlay(Text(!guessedWordIndices.contains(wordIndex) ? "" : "\(letter.uppercased())" as String))
                             }
                                 
                         }
@@ -125,7 +120,7 @@ struct PlayableScreen: View {
                 }
                 
                 VStack {
-                    Text(enteredWord).fontWeight(.bold)
+                    Text(enteredWord.uppercased()).fontWeight(.bold)
                     getLetterPicker()
                 }
             }
