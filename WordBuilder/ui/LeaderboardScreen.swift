@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct LeaderboardScreen: View {
-    @EnvironmentObject var viewRouter: ViewRouter
     @State var leaders: [Leader] = []
+    @State private var showView = false
     
     var body: some View {
         NavigationView {
@@ -33,26 +33,6 @@ struct LeaderboardScreen: View {
                     }
                 }
                 .navigationBarTitle("Leaderboard", displayMode: .inline)
-                .navigationBarItems(
-                    leading: Button(
-                        action: {
-                            withAnimation {
-                                viewRouter.currentPage = .page2
-                            }
-                        },
-                        label: {
-                            Image(systemName: "arrow.backward")
-                        }
-                    ),
-                    trailing: Button(
-                        action: {
-                        
-                        },
-                        label: {
-                            Image(systemName: "crown.fill").foregroundColor(.yellow)
-                        }
-                    )
-                )
             }
         }
     }
@@ -60,6 +40,6 @@ struct LeaderboardScreen: View {
 
 struct LeaderboardScreen_Previews: PreviewProvider {
     static var previews: some View {
-        LeaderboardScreen().environmentObject(ViewRouter())
+        LeaderboardScreen()
     }
 }

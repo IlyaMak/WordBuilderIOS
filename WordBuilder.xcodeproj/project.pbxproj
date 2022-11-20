@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0962C36928FEE1900019CE25 /* MotherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0962C36828FEE1900019CE25 /* MotherView.swift */; };
-		0962C36E28FEE2650019CE25 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0962C36D28FEE2650019CE25 /* Helper.swift */; };
-		0962C37328FEE2950019CE25 /* ViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0962C37228FEE2950019CE25 /* ViewRouter.swift */; };
+		09346B3C2927FFC500A80077 /* LevelCompleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09346B3B2927FFC500A80077 /* LevelCompleted.swift */; };
+		095E46642929895E009CD546 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095E46632929895E009CD546 /* SplashScreen.swift */; };
 		0976924F28E8530300FA165C /* WordBuilderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0976924E28E8530300FA165C /* WordBuilderApp.swift */; };
 		0976925128E8530300FA165C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0976925028E8530300FA165C /* ContentView.swift */; };
 		0976925328E8530500FA165C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0976925228E8530500FA165C /* Assets.xcassets */; };
@@ -50,9 +49,8 @@
 /* Begin PBXFileReference section */
 		0479FDB9BF4B1E0C991E3C1F /* Pods_WordBuilderTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WordBuilderTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0556567E33B0E1AB8DF39D13 /* Pods-WordBuilderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordBuilderTests.debug.xcconfig"; path = "Target Support Files/Pods-WordBuilderTests/Pods-WordBuilderTests.debug.xcconfig"; sourceTree = "<group>"; };
-		0962C36828FEE1900019CE25 /* MotherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotherView.swift; sourceTree = "<group>"; };
-		0962C36D28FEE2650019CE25 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
-		0962C37228FEE2950019CE25 /* ViewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRouter.swift; sourceTree = "<group>"; };
+		09346B3B2927FFC500A80077 /* LevelCompleted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelCompleted.swift; sourceTree = "<group>"; };
+		095E46632929895E009CD546 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 		0976924B28E8530300FA165C /* WordBuilder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WordBuilder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0976924E28E8530300FA165C /* WordBuilderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordBuilderApp.swift; sourceTree = "<group>"; };
 		0976925028E8530300FA165C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -144,9 +142,6 @@
 				0976925228E8530500FA165C /* Assets.xcassets */,
 				0976925728E8530500FA165C /* Info.plist */,
 				0976925428E8530500FA165C /* Preview Content */,
-				0962C36828FEE1900019CE25 /* MotherView.swift */,
-				0962C36D28FEE2650019CE25 /* Helper.swift */,
-				0962C37228FEE2950019CE25 /* ViewRouter.swift */,
 			);
 			path = WordBuilder;
 			sourceTree = "<group>";
@@ -184,6 +179,7 @@
 				097AFBBA28EF856100D2BACA /* LevelScreen.swift */,
 				09A8588528F8A3D50017DC95 /* PlayableScreen.swift */,
 				09FC13CB2901C44B00FA65D6 /* LeaderboardScreen.swift */,
+				095E46632929895E009CD546 /* SplashScreen.swift */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -203,6 +199,7 @@
 				09AFB53928F2B43300B1FA87 /* Application.swift */,
 				09AFB53E28F2FF3500B1FA87 /* Level.swift */,
 				09A9630B2902F81900CEB530 /* Leader.swift */,
+				09346B3B2927FFC500A80077 /* LevelCompleted.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -476,19 +473,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				09A9630C2902F81900CEB530 /* Leader.swift in Sources */,
-				0962C36E28FEE2650019CE25 /* Helper.swift in Sources */,
 				09AFB53A28F2B43300B1FA87 /* Application.swift in Sources */,
 				09AFB53F28F2FF3500B1FA87 /* Level.swift in Sources */,
-				0962C37328FEE2950019CE25 /* ViewRouter.swift in Sources */,
 				0976925128E8530300FA165C /* ContentView.swift in Sources */,
 				097AFBB628EEB79600D2BACA /* Registration.swift in Sources */,
 				09AFB52F28F2B3A700B1FA87 /* Network.swift in Sources */,
+				095E46642929895E009CD546 /* SplashScreen.swift in Sources */,
 				097AFBBB28EF856100D2BACA /* LevelScreen.swift in Sources */,
 				09AFB54928F302AE00B1FA87 /* Endpoints.swift in Sources */,
 				0976924F28E8530300FA165C /* WordBuilderApp.swift in Sources */,
 				09FC13CC2901C44B00FA65D6 /* LeaderboardScreen.swift in Sources */,
+				09346B3C2927FFC500A80077 /* LevelCompleted.swift in Sources */,
 				09A8588628F8A3D50017DC95 /* PlayableScreen.swift in Sources */,
-				0962C36928FEE1900019CE25 /* MotherView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

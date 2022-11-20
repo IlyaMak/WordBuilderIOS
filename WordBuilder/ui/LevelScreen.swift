@@ -9,11 +9,13 @@ import SwiftUI
 import RealmSwift
 
 struct LevelScreen: View {
-    @EnvironmentObject var viewRouter: ViewRouter
     @State var levels: [Level] = []
     @ObservedResults(Application.self) var applications
+    @State private var showPlayableView = false
+    @State private var showLeaderboardView = false
     
     var body: some View {
+        var nextLevelIndex = 1
         NavigationView {
             VStack {
                 List(levels) { level in
@@ -43,31 +45,51 @@ struct LevelScreen: View {
                     .navigationBarItems(
                         trailing: Button(
                             action: {
-                                withAnimation {
-                                    viewRouter.currentPage = .page4
-                                }
+                                self.showLeaderboardView.toggle()
                             },
                             label: {
                                 Image(systemName: "crown.fill").foregroundColor(.yellow)
                             }
                         )
+                        .sheet(isPresented: $showLeaderboardView) {
+                            LeaderboardScreen()
+                        }
                     )
                 
                 Button(action: {
-                    withAnimation {
-                        viewRouter.currentPage = .page3
-                    }
+                    self.showPlayableView.toggle()
                 }, label: {
-                            Image(systemName: "play")
-                                .font(.largeTitle)
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(
-                                    Color.green
-                                        .cornerRadius(10)
-                                        .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
-                                )
-                }
+                    Image(systemName: "play")
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(
+                            Color.green
+                                .cornerRadius(10)
+                                .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                        )
+                })
+                
+                NavigationLink(
+                    destination: PlayableScreen(levelIndex: nextLevelIndex)
+                        .navigationBarTitle("Level \(nextLevelIndex)", displayMode: .inline)
+                        .navigationBarItems(
+                            trailing: Button(
+                                action: {
+                                    self.showLeaderboardView.toggle()
+                                },
+                                label: {
+                                    Image(systemName: "crown.fill").foregroundColor(.yellow)
+                                }
+                            )
+                            .sheet(isPresented: $showLeaderboardView) {
+                                LeaderboardScreen()
+                            }
+                        ),
+                    isActive: $showPlayableView,
+                    label: {
+                        
+                    }
                 )
             }
         }
@@ -76,6 +98,6 @@ struct LevelScreen: View {
 
 struct Level_Previews: PreviewProvider {
     static var previews: some View {
-        LevelScreen().environmentObject(ViewRouter())
+        LevelScreen()
     }
 }

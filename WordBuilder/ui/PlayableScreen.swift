@@ -8,16 +8,19 @@
 import SwiftUI
 
 struct PlayableScreen: View {
-    let maxNumberOfLettersPerRow = 8
+    let maxNumberOfLettersPerRow = 4
     let maxNumberOfRows = 2
     let minNumberOfRows = 1
     let maxWordLengthMinValue = 5
     let letterButtonSizePercent = 0.1
-    @EnvironmentObject var viewRouter: ViewRouter
-    var words: [String] = ["cow", "low", "bow", "bowl", "row"]
+//    @EnvironmentObject var viewRouter: ViewRouter
+    var words: [String] = ["cow", "low", "bow", "bowl"]
     @State var enteredWord = ""
     @State var guessedWordIndices: Set<Int> = []
     @State var maxWordLength: Int = 0
+    var currentLevelIndex: Int
+    @State private var showLevelView = false
+    @State private var showLeaderboardView = false
     
 //    var letters: [String] {
 //            get {
@@ -42,9 +45,10 @@ struct PlayableScreen: View {
     
     var letters: [String]
     
-    init() {
+    init(levelIndex: Int) {
         arrayLetters = words.joined().map{String($0)}
         letters = NSOrderedSet(array: arrayLetters.shuffled()).array as! [String]
+        currentLevelIndex = levelIndex
     }
     
     func handleLetterButtonPressed(letter: String) -> Void {
@@ -65,8 +69,8 @@ struct PlayableScreen: View {
     }
     
     func getLetterPicker() -> some View {
-        return VStack {
-//            ForEach(Array(arrayLiteral: numberOfRows), id: \.self) { index in
+        let numberOfRows = letters.count > maxNumberOfLettersPerRow ? maxNumberOfRows : minNumberOfRows
+        return ForEach(Array(arrayLiteral: numberOfRows), id: \.self) { index in
                 HStack {
 //                    (index == 0
 //                    ? letters[0...numberOfRows == 1 ? 0 : ceil(letters.count / 2)]
@@ -75,8 +79,9 @@ struct PlayableScreen: View {
 //                    let a = letters[0...Int(ceil(Double((letters.count / 2))))].map({$0})
                     
 //                    let letterSliceForFirstIndex = numberOfRows == 1 ? 0 : Int(ceil(Double(letters.count / 2)))
-//                    let elementsInRows = (index == 0 ? letters[0...letterSliceForFirstIndex] : letters[Int(ceil(Double((letters.count - 1) / 2)))...letters.count - 1])
-//                    Text("\(elementsInRow)" as String)
+//                    let elementsInRows = (index == 0 ? letters[0...letterSliceForFirstIndex] : letters[Int(ceil(Double((letters.count) / 2)))...letters.count - 1])
+//                    Text("\(elementsInRows)" as String).fontWeight(.bold)
+                    
                     ForEach(letters, id: \.self) { letter in
                         Button(
                             action: {
@@ -90,69 +95,42 @@ struct PlayableScreen: View {
                                     .background(
                                         Color.purple
                                             .cornerRadius(10)
-                                            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                                            .shadow(radius: 5)
                                     )
                             }
                         )
                     }
                 }
-//            }
-        }
+            }
     }
     
     var body: some View {
-        NavigationView {
             VStack {
-                VStack {
-                    ForEach(words.indices) { wordIndex in
-                        HStack {
-                            ForEach(Array(words[wordIndex]), id: \.self) { letter in
-                                Rectangle()
-                                    .foregroundColor(.white)
-                                    .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
-                                    .cornerRadius(3)
-                                    .frame(width: 50, height: 50)
-                                    .overlay(Text(!guessedWordIndices.contains(wordIndex) ? "" : "\(letter.uppercased())" as String))
-                            }
-                                
+                ForEach(words.indices) { wordIndex in
+                    HStack {
+                        ForEach(Array(words[wordIndex]), id: \.self) { letter in
+                            Rectangle()
+                                .foregroundColor(.white)
+                                .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
+                                .cornerRadius(3)
+                                .frame(width: 50, height: 50)
+                                .overlay(Text(!guessedWordIndices.contains(wordIndex) ? "" : "\(letter.uppercased())" as String))
                         }
                     }
                 }
                 
-                VStack {
-                    Text(enteredWord.uppercased()).fontWeight(.bold)
-                    getLetterPicker()
-                }
+                Text(enteredWord.uppercased()).fontWeight(.bold)
+                
+                getLetterPicker()
+                
             }
-                .navigationBarTitle("Play", displayMode: .inline)
-                .navigationBarItems(
-                    leading: Button(
-                        action: {
-                            withAnimation {
-                                viewRouter.currentPage = .page2
-                            }
-                        },
-                        label: {
-                            Image(systemName: "arrow.backward")
-                        }
-                    ),
-                    trailing: Button(
-                        action: {
-                            withAnimation {
-                                viewRouter.currentPage = .page4
-                            }
-                        },
-                        label: {
-                            Image(systemName: "crown.fill").foregroundColor(.yellow)
-                        }
-                    )
-                )
-        }
     }
 }
 
 struct PlayableScreen_Previews: PreviewProvider {
+    static var currentLevelIndex = 0
+    
     static var previews: some View {
-        PlayableScreen().environmentObject(ViewRouter())
+        PlayableScreen(levelIndex: currentLevelIndex)
     }
 }

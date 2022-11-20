@@ -6,14 +6,22 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 @main
-struct WordBuilderApp: App {
-    @StateObject var viewRouter = ViewRouter()
+struct WordBuilderApp: SwiftUI.App {
+    let realm = try! Realm()
+    var applications: Results<Application>? = nil
     
     var body: some Scene {
+        
         WindowGroup {
-            MotherView().environmentObject(viewRouter)
+//            MotherView().environmentObject(viewRouter)
+            if realm.objects(Application.self).count == 0 {
+                Registration()
+            } else {
+                LevelScreen()
+            }
         }
     }
 }
