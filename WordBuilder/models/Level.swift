@@ -6,10 +6,16 @@
 //
 
 import Foundation
+import RealmSwift
 
-struct Level: Identifiable, Codable {
-    var id: Int
-    var number: Int
-    var words: [String]
-    var totalCompletions: Int
+class Level: Object, Identifiable, Decodable {
+//    @Persisted(primaryKey: true) var _id: Int
+//    @Persisted var number: Int
+//    @objc var words: [String]
+//    @Persisted var totalCompletions: Int
+    
+    @objc dynamic var id: Int = 0
+    @objc dynamic var number = 0
+    var words = List<String>()
+    @objc dynamic var totalCompletions: Int = 0
 }

@@ -21,6 +21,7 @@ struct PlayableScreen: View {
     var currentLevelIndex: Int
     @State private var showLevelView = false
     @State private var showLeaderboardView = false
+    var levels: [Level] = []
     
 //    var letters: [String] {
 //            get {
@@ -45,10 +46,18 @@ struct PlayableScreen: View {
     
     var letters: [String]
     
-    init(levelIndex: Int) {
+    init(levelIndex: Int, levelList: [Level]) {
+        currentLevelIndex = levelIndex
+
+//        Network().getLevels { (levels) in
+        levels = levelList
+            
+//        words = levelList.count == 0 ? [] : levels[currentLevelIndex].words
+        words = levelList.count == 0 ? [] : Array(levelList[currentLevelIndex].words)
+//        }
+        
         arrayLetters = words.joined().map{String($0)}
         letters = NSOrderedSet(array: arrayLetters.shuffled()).array as! [String]
-        currentLevelIndex = levelIndex
     }
     
     func handleLetterButtonPressed(letter: String) -> Void {
@@ -127,10 +136,10 @@ struct PlayableScreen: View {
     }
 }
 
-struct PlayableScreen_Previews: PreviewProvider {
-    static var currentLevelIndex = 0
-    
-    static var previews: some View {
-        PlayableScreen(levelIndex: currentLevelIndex)
-    }
-}
+//struct PlayableScreen_Previews: PreviewProvider {
+//    static var currentLevelIndex = 0
+//
+//    static var previews: some View {
+//        PlayableScreen(levelIndex: currentLevelIndex)
+//    }
+//}

@@ -10,18 +10,17 @@ import RealmSwift
 
 @main
 struct WordBuilderApp: SwiftUI.App {
-    let realm = try! Realm()
-    var applications: Results<Application>? = nil
+//    let realm = try! Realm()
+//    var applications: Results<Application>? = nil
     
     var body: some Scene {
         
         WindowGroup {
-//            MotherView().environmentObject(viewRouter)
-            if realm.objects(Application.self).count == 0 {
-                Registration()
-            } else {
-                LevelScreen()
-            }
+//            if realm.objects(Application.self).count == 0 {
+//                Registration()
+//            } else {
+                SplashScreen()
+//            }
         }
     }
 }

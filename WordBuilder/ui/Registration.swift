@@ -17,7 +17,8 @@ struct Registration: View {
         NavigationView {
             VStack {
                 Text("Hello \(name)")
-                TextField("Enter your name", text: $name).textFieldStyle(RoundedBorderTextFieldStyle()).padding()
+                TextField("Enter your name", text:$name)
+                    .textFieldStyle(RoundedBorderTextFieldStyle()).padding()
                         
                 Button(
                     action: {
@@ -29,6 +30,7 @@ struct Registration: View {
                         try! realm.write {
                             realm.add(application)
                         }
+                        
                         self.showLevelView.toggle()
                 }, label: {
                     Text("Register".uppercased())

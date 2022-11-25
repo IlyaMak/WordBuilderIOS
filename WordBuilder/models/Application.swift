@@ -21,6 +21,7 @@ import RealmSwift
 //}
 
 class Application: Object, Identifiable  {
+//    @Persisted(primaryKey: true) var id: ObjectId
     @Persisted(primaryKey: true) var _id: Int
     @Persisted var name: String
     @Persisted var token: String

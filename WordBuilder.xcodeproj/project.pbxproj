@@ -23,6 +23,7 @@
 		09AFB53A28F2B43300B1FA87 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AFB53928F2B43300B1FA87 /* Application.swift */; };
 		09AFB53F28F2FF3500B1FA87 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AFB53E28F2FF3500B1FA87 /* Level.swift */; };
 		09AFB54928F302AE00B1FA87 /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AFB54828F302AE00B1FA87 /* Endpoints.swift */; };
+		09BBBEBC2931092C005CD6BD /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09BBBEBB2931092C005CD6BD /* RealmManager.swift */; };
 		09FC13CC2901C44B00FA65D6 /* LeaderboardScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09FC13CB2901C44B00FA65D6 /* LeaderboardScreen.swift */; };
 		7008E9B5EEA3935CCD4646A8 /* Pods_WordBuilderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0479FDB9BF4B1E0C991E3C1F /* Pods_WordBuilderTests.framework */; };
 		B1569B5C9E7114C8892D3629 /* Pods_WordBuilder_WordBuilderUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B0F632782C395121CCE10B5 /* Pods_WordBuilder_WordBuilderUITests.framework */; };
@@ -71,6 +72,7 @@
 		09AFB53928F2B43300B1FA87 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		09AFB53E28F2FF3500B1FA87 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		09AFB54828F302AE00B1FA87 /* Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
+		09BBBEBB2931092C005CD6BD /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		09FC13CB2901C44B00FA65D6 /* LeaderboardScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardScreen.swift; sourceTree = "<group>"; };
 		249212210C5606EC62514A58 /* Pods-WordBuilder-WordBuilderUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordBuilder-WordBuilderUITests.debug.xcconfig"; path = "Target Support Files/Pods-WordBuilder-WordBuilderUITests/Pods-WordBuilder-WordBuilderUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		4B0F632782C395121CCE10B5 /* Pods_WordBuilder_WordBuilderUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WordBuilder_WordBuilderUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -189,6 +191,7 @@
 			children = (
 				09AFB54728F3028200B1FA87 /* constants */,
 				09AFB52E28F2B3A700B1FA87 /* Network.swift */,
+				09BBBEBB2931092C005CD6BD /* RealmManager.swift */,
 			);
 			path = network;
 			sourceTree = "<group>";
@@ -477,6 +480,7 @@
 				09AFB53F28F2FF3500B1FA87 /* Level.swift in Sources */,
 				0976925128E8530300FA165C /* ContentView.swift in Sources */,
 				097AFBB628EEB79600D2BACA /* Registration.swift in Sources */,
+				09BBBEBC2931092C005CD6BD /* RealmManager.swift in Sources */,
 				09AFB52F28F2B3A700B1FA87 /* Network.swift in Sources */,
 				095E46642929895E009CD546 /* SplashScreen.swift in Sources */,
 				097AFBBB28EF856100D2BACA /* LevelScreen.swift in Sources */,
