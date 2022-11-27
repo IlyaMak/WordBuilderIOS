@@ -12,40 +12,38 @@ struct LevelScreen: View {
     @ObservedResults(Application.self) var applications
     @State private var showPlayableView = false
     @State private var showLeaderboardView = false
-    @StateObject var realmManager = RealmManager()
+    @State private var viewId: Int = 0
+//    @StateObject var realmManager = RealmManager()
     
     var body: some View {
         let realm = try! Realm()
         var levels: [Level] = []
         realm.objects(Level.self).forEach { level in
-                    levels.append(level)
+            levels.append(level)
         }
         
-        var nextLevelIndex = 0
+        var levelCompleted: [LevelCompleted]? = []
+        realm.objects(LevelCompleted.self).forEach { levelCompletedRecord in
+            levelCompleted?.append(levelCompletedRecord)
+        }
+        
+        var nextLevelIndex = levelCompleted!.isEmpty ? 0 : (levels.firstIndex(where: {$0.id == levelCompleted?.last?.levelId}))! + 1
+        
+        var nextLevelNumber = 1
+        var areAllLevelsCompleted = false
+        
+        if((levels.first(where: {$0 == levels[nextLevelIndex]})?.number) != nil) {
+            nextLevelNumber = levels[nextLevelIndex].number
+        } else {
+            nextLevelNumber = 1
+            nextLevelIndex = 0
+            areAllLevelsCompleted = true
+        }
         
         return NavigationView {
             VStack {
-//                List(levels) { level in
-//                    Text("All users").font(.title).bold()
-//                            VStack {
-//                                VStack(alignment: .leading) {
-//                                    Text("\(level.number)").bold()
-//
-//                                    Text(level.words.joined(separator: ", "))
-//
-//                                    Text("\(level.totalCompletions)")
-//                                }
-//                            }
-//                            .frame(width: 150, alignment: .leading)
-//                            .padding()
-//                            .background(Color.yellow)
-//                            .cornerRadius(20)
-//                }
-//                .onAppear {
-//                    Network().getLevels { (levels) in
-//                        self.levels = levels
-//                    }
-//                }
+                Text(areAllLevelsCompleted ? "All levels are completed. Come back later!" : "Level \(nextLevelNumber)")
+                    .id(viewId)
                 
                 Text("\(applications.first?._id) \(applications.first?.name) \(applications.first?.token)" as String).padding()
                     .navigationBarBackButtonHidden(true)
@@ -80,7 +78,6 @@ struct LevelScreen: View {
                 
                 NavigationLink(
                     destination: PlayableScreen(levelIndex: nextLevelIndex, levelList: levels)
-                        .navigationBarTitle("Level \(levels.count == 0 ? 0 : levels[nextLevelIndex].number)", displayMode: .inline)
                         .navigationBarItems(
                             trailing: Button(
                                 action: {
@@ -92,6 +89,9 @@ struct LevelScreen: View {
                             )
                             .sheet(isPresented: $showLeaderboardView) {
                                 LeaderboardScreen()
+                            }
+                            .onDisappear {
+                                viewId += 1
                             }
                         ),
                     isActive: $showPlayableView,

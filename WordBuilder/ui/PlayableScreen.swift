@@ -6,6 +6,14 @@
 //
 
 import SwiftUI
+import RealmSwift
+
+class LevelModel: ObservableObject {
+    @Published var words: [String] = []
+    @Published var arraysLetters: [String] = []
+    @Published var letters: [String] = []
+    @Published var maxWordsLength: Int = 0
+}
 
 struct PlayableScreen: View {
     let maxNumberOfLettersPerRow = 4
@@ -13,71 +21,63 @@ struct PlayableScreen: View {
     let minNumberOfRows = 1
     let maxWordLengthMinValue = 5
     let letterButtonSizePercent = 0.1
-//    @EnvironmentObject var viewRouter: ViewRouter
-    var words: [String] = ["cow", "low", "bow", "bowl"]
     @State var enteredWord = ""
     @State var guessedWordIndices: Set<Int> = []
-    @State var maxWordLength: Int = 0
-    var currentLevelIndex: Int
+    @State var currentLevelIndex: Int
     @State private var showLevelView = false
     @State private var showLeaderboardView = false
+    @ObservedObject var levelModel: LevelModel = LevelModel()
     var levels: [Level] = []
     
-//    var letters: [String] {
-//            get {
-//                return Array(Set(words.reduce("", {(value, element) in
-//                    value + element
-//                }).map{String($0)}))
-//            }
-//        }
-    
-    var arrayLetters: [String]
-//    {
-//        get {
-//            var letters = [String]()
-//            for word in words {
-//                for letter in word {
-//                    letters.append(String(letter))
-//                }
-//            }
-//            return letters
-//        }
-//    }
-    
-    var letters: [String]
-    
     init(levelIndex: Int, levelList: [Level]) {
-        currentLevelIndex = levelIndex
-
-//        Network().getLevels { (levels) in
+        _currentLevelIndex = State(initialValue: levelIndex)
         levels = levelList
-            
-//        words = levelList.count == 0 ? [] : levels[currentLevelIndex].words
-        words = levelList.count == 0 ? [] : Array(levelList[currentLevelIndex].words)
-//        }
-        
-        arrayLetters = words.joined().map{String($0)}
-        letters = NSOrderedSet(array: arrayLetters.shuffled()).array as! [String]
+        initLevel(levelIndex: currentLevelIndex, levelList: levelList)
     }
     
-    func handleLetterButtonPressed(letter: String) -> Void {
-        maxWordLength = words.reduce("", { (value, element) in
+    func initLevel(levelIndex: Int, levelList: [Level]) {
+        let words = levelList.count == 0 ? [] : Array(levelList[levelIndex].words)
+        print(levelList.count == 0 ? [] : Array(levelList[levelIndex].words))
+        let arrayLetters = words.joined().map{String($0)}
+        let letters = NSOrderedSet(array: arrayLetters.shuffled()).array as! [String]
+        var maxWordLength = words.reduce("", { (value, element) in
                                         element.count > value.count ? value : element}).count
         maxWordLength = maxWordLength < maxWordLengthMinValue ? maxWordLengthMinValue : maxWordLength
         
+        levelModel.words = words
+        levelModel.letters = letters
+        levelModel.arraysLetters = arrayLetters
+        levelModel.maxWordsLength = maxWordLength
+    }
+    
+    func handleLetterButtonPressed(letter: String) -> Void {
+        let words = levelModel.words
+        let maxWordLength = levelModel.maxWordsLength
+        
         if(guessedWordIndices.count != words.count && enteredWord.count + 1 <= maxWordLength) {
             enteredWord += letter
-            var index = words.firstIndex(of: enteredWord)
+            let index = words.firstIndex(of: enteredWord)
+            
             if(index != nil && !guessedWordIndices.contains(index!)) {
                 guessedWordIndices.insert(index!)
                 enteredWord = ""
                 
-                
+                if(guessedWordIndices.count == words.count) {
+                    let realm = try! Realm()
+                    let levelCompleted = LevelCompleted()
+                    levelCompleted.levelId = levels[currentLevelIndex].id
+                    try! realm.write {
+                        realm.add(levelCompleted)
+                    }
+                    print(realm.objects(LevelCompleted.self))
+                }
             }
         }
     }
     
     func getLetterPicker() -> some View {
+        let letters = levelModel.letters
+        
         let numberOfRows = letters.count > maxNumberOfLettersPerRow ? maxNumberOfRows : minNumberOfRows
         return ForEach(Array(arrayLiteral: numberOfRows), id: \.self) { index in
                 HStack {
@@ -113,9 +113,20 @@ struct PlayableScreen: View {
             }
     }
     
+    func goToNextLevel() {
+        if(levels.contains(levels[currentLevelIndex + 1])) {
+            currentLevelIndex += 1
+            initLevel(levelIndex: currentLevelIndex, levelList: levels)
+            enteredWord = ""
+            guessedWordIndices.removeAll()
+        }
+    }
+    
     var body: some View {
-            VStack {
-                ForEach(words.indices) { wordIndex in
+        let words = levelModel.words
+        
+            return VStack {
+                ForEach(words.indices, id: \.self) { wordIndex in
                     HStack {
                         ForEach(Array(words[wordIndex]), id: \.self) { letter in
                             Rectangle()
@@ -130,8 +141,26 @@ struct PlayableScreen: View {
                 
                 Text(enteredWord.uppercased()).fontWeight(.bold)
                 
-                getLetterPicker()
+                Button(
+                    action: {
+                        guessedWordIndices.count == words.count ? goToNextLevel() : nil
+                    },
+                    label: {
+                        Image(systemName: "play")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(
+                                Color.green
+                                    .cornerRadius(10)
+                                    .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                            )
+                    }
+                )
+                .opacity(guessedWordIndices.count == words.count ? 1 : 0)
                 
+                getLetterPicker()
+                    .navigationBarTitle("Level \(levels.count == 0 ? 0 : levels[currentLevelIndex].number)", displayMode: .inline)
             }
     }
 }
