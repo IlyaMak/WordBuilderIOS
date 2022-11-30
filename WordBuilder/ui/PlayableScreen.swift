@@ -138,8 +138,19 @@ struct PlayableScreen: View {
                         }
                     }
                 }
-                
-                Text(enteredWord.uppercased()).fontWeight(.bold)
+                HStack {
+                    Text(enteredWord.uppercased()).fontWeight(.bold)
+                    Button(
+                        action: {
+                            enteredWord.removeLast()
+                        },
+                        label: {
+                            Image(systemName: "delete.left")
+                                .foregroundColor(.black)
+                        }
+                    )
+                    .opacity(enteredWord == "" ? 0 : 1)
+                }
                 
                 Button(
                     action: {
