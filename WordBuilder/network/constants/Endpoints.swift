@@ -11,5 +11,5 @@ class Endpoints {
     static let baseUrl: String = "https://word-constructor-web.vercel.app"
     static let getLeaders: String = baseUrl + "/api/leaders";
     static let getLevels: String = baseUrl + "/api/levels";
-    static let getApplications: String = baseUrl + "/api/applications";
+    static let applications: String = baseUrl + "/api/applications";
 }

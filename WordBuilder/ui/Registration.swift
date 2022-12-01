@@ -24,14 +24,17 @@ struct Registration: View {
                     action: {
                         let application = Application()
                         application.name = name
-                        application.token = "1234567890"
+                        Network.postApplication(application: application, onSuccess: { token in
+                            application.token = token
+                            application.token = token
+                            print(application.token + " token")
+                            let realm = try! Realm()
+                            try! realm.write {
+                                realm.add(application)
+                            }
+                            self.showLevelView.toggle()
+                        })
                         
-                        let realm = try! Realm()
-                        try! realm.write {
-                            realm.add(application)
-                        }
-                        
-                        self.showLevelView.toggle()
                 }, label: {
                     Text("Register".uppercased())
                         .font(.headline)

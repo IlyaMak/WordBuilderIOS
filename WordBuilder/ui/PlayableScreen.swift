@@ -37,7 +37,6 @@ struct PlayableScreen: View {
     
     func initLevel(levelIndex: Int, levelList: [Level]) {
         let words = levelList.count == 0 ? [] : Array(levelList[levelIndex].words)
-        print(levelList.count == 0 ? [] : Array(levelList[levelIndex].words))
         let arrayLetters = words.joined().map{String($0)}
         let letters = NSOrderedSet(array: arrayLetters.shuffled()).array as! [String]
         var maxWordLength = words.reduce("", { (value, element) in
