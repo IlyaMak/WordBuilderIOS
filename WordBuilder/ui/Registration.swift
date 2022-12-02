@@ -12,6 +12,9 @@ struct Registration: View {
     @State private var name = ""
     @State private var showLevelView = false
     @State private var showLeaderboardView = false
+    @State private var showErrorAlert = false
+    @State private var isNameShort = false
+    @State private var isServerError = false
     
     var body: some View {
         NavigationView {
@@ -24,8 +27,14 @@ struct Registration: View {
                     action: {
                         let application = Application()
                         application.name = name
-                        Network.postApplication(application: application, onSuccess: { token in
-                            application.token = token
+                        
+                        if(name.count < 3) {
+                            self.showErrorAlert.toggle()
+                            self.isNameShort.toggle()
+                            return
+                        }
+                        
+                        Network.createPostRequest(endpoint: Endpoints.applications, application: application, parameters: ["name": application.name], onSuccess: { token in
                             application.token = token
                             print(application.token + " token")
                             let realm = try! Realm()
@@ -33,8 +42,11 @@ struct Registration: View {
                                 realm.add(application)
                             }
                             self.showLevelView.toggle()
+                        }, onError: {
+                            print("some wrong")
+                            self.showErrorAlert.toggle()
+                            self.isServerError.toggle()
                         })
-                        
                 }, label: {
                     Text("Register".uppercased())
                         .font(.headline)
@@ -46,6 +58,17 @@ struct Registration: View {
                                 .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                         )
                     })
+                    .alert(isPresented: $showErrorAlert) {
+                        if isNameShort {
+                            return Alert(title: Text("Short name"),
+                                         message: Text("Your lenght name should be more than 3"),
+                                         dismissButton: .default(Text("OK")))
+                        } else {
+                            return Alert(title: Text("Server error"),
+                                         message: Text("Please, register later or change your name to another one"),
+                                         dismissButton: .default(Text("OK")))
+                        }
+                    }
                 
                 NavigationLink(
                     destination: LevelScreen().navigationBarHidden(true),
