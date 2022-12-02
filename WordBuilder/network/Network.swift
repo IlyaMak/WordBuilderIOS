@@ -35,9 +35,9 @@ class Network {
     }
     
     //Endpoint, application(need token), parameters(Map), callback, onError(maybe call in catch or else)?
-    static func postApplication(application: Application, onSuccess: @escaping (String) -> ()) {
-        let parameters: [String: Any] = ["name": application.name]
-        let url = URL(string: Endpoints.applications)!
+    static func createPostRequest(endpoint: String, application: Application, parameters: [String: Any],  onSuccess: @escaping (String) -> (), onError: @escaping () -> ()) {
+//        let parameters: [String: Any] = ["name": application.name]
+        guard let url = URL(string: endpoint) else { return onError() }
         
         // create the session object
         let session = URLSession.shared
@@ -49,12 +49,14 @@ class Network {
         // add headers for the request
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(application.token, forHTTPHeaderField: "X-Application-Token")
         
         do {
           // convert parameters to Data and assign dictionary to httpBody of request
           request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
         } catch let error {
           print(error.localizedDescription)
+            onError()
         }
         
         // create dataTask using the session object to send data to the server
@@ -62,6 +64,7 @@ class Network {
           
           if let error = error {
             print("Post Request Error: \(error.localizedDescription)")
+            onError()
             return
           }
           
@@ -70,12 +73,14 @@ class Network {
                 (200...299).contains(httpResponse.statusCode)
           else {
             print("Invalid Response received from the server")
+            onError()
             return
           }
           
           // ensure there is data returned
           guard let responseData = data else {
             print("nil Data received from the server")
+            onError()
             return
           }
           
@@ -86,11 +91,13 @@ class Network {
               print(jsonResponse)
               // handle json response
             } else {
-              print("data maybe corrupted or in wrong format")
-              throw URLError(.badServerResponse)
+                print("data maybe corrupted or in wrong format")
+                onError()
+                throw URLError(.badServerResponse)
             }
           } catch let error {
-            print(error.localizedDescription)
+                print(error.localizedDescription)
+                onError()
           }
         }
         // perform the task
