@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class LevelCompleted: Object, Identifiable, Decodable  {
-    @objc dynamic var id: Int
-    @objc dynamic var levelId: Int
+class LevelCompleted: Object, Identifiable  {
+    @Persisted(primaryKey: true) var id: Int
+    @Persisted var levelId: Int
 }

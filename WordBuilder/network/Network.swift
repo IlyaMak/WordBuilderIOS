@@ -35,9 +35,12 @@ class Network {
     }
     
     //Endpoint, application(need token), parameters(Map), callback, onError(maybe call in catch or else)?
-    static func createPostRequest(endpoint: String, application: Application, parameters: [String: Any],  onSuccess: @escaping (String) -> (), onError: @escaping () -> ()) {
+    static func createPostRequest(endpoint: String, application: Application, parameters: Any,  onSuccess: @escaping (Any?) -> (), onError: @escaping () -> ()) {
 //        let parameters: [String: Any] = ["name": application.name]
-        guard let url = URL(string: endpoint) else { return onError() }
+        guard let url = URL(string: endpoint) else {
+            print("err url")
+            return onError()
+        }
         
         // create the session object
         let session = URLSession.shared
@@ -55,7 +58,7 @@ class Network {
           // convert parameters to Data and assign dictionary to httpBody of request
           request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
         } catch let error {
-          print(error.localizedDescription)
+            print("Serialization: " + error.localizedDescription)
             onError()
         }
         
@@ -78,27 +81,32 @@ class Network {
           }
           
           // ensure there is data returned
-          guard let responseData = data else {
+            guard let responseData = data else {
             print("nil Data received from the server")
             onError()
             return
           }
-          
-          do {
-            // create json object from data or use JSONDecoder to convert to Model stuct
-            if let jsonResponse = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers) as? [String: Any] {
-                onSuccess(jsonResponse["token"] as! String)
-              print(jsonResponse)
-              // handle json response
-            } else {
-                print("data maybe corrupted or in wrong format")
-                onError()
-                throw URLError(.badServerResponse)
+            
+            if (responseData.isEmpty) {
+                onSuccess(nil)
+                return
             }
-          } catch let error {
-                print(error.localizedDescription)
+            
+            do {
+            // create json object from data or use JSONDecoder to convert to Model stuct
+                if let jsonResponse = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers) as? [String: Any] {
+                    onSuccess(jsonResponse)
+                    print(jsonResponse)
+                    // handle json response
+                    } else {
+                        print("data maybe corrupted or in wrong format")
+                        onError()
+                        throw URLError(.badServerResponse)
+                    }
+            } catch let error {
+                print("Response: " + error.localizedDescription)
                 onError()
-          }
+            }
         }
         // perform the task
         task.resume()

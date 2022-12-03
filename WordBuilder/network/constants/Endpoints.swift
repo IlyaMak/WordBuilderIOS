@@ -12,4 +12,5 @@ class Endpoints {
     static let getLeaders: String = baseUrl + "/api/leaders";
     static let getLevels: String = baseUrl + "/api/levels";
     static let applications: String = baseUrl + "/api/applications";
+    static let levelsCompleted: String = baseUrl + "/api/levels-completed";
 }

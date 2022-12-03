@@ -34,9 +34,9 @@ struct Registration: View {
                             return
                         }
                         
-                        Network.createPostRequest(endpoint: Endpoints.applications, application: application, parameters: ["name": application.name], onSuccess: { token in
-                            application.token = token
-                            print(application.token + " token")
+                        Network.createPostRequest(endpoint: Endpoints.applications, application: application, parameters: ["name": application.name], onSuccess: { jsonResponse in
+                            let json = jsonResponse as! Dictionary<String, String>
+                            application.token = json["token"]!
                             let realm = try! Realm()
                             try! realm.write {
                                 realm.add(application)

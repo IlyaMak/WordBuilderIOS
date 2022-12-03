@@ -9,7 +9,7 @@ import SwiftUI
 import RealmSwift
 
 struct LevelScreen: View {
-    @ObservedResults(Application.self) var applications
+    @ObservedResults(Application.self) var results
     @State private var showPlayableView = false
     @State private var showLeaderboardView = false
     @State private var viewId: Int = 0
@@ -45,7 +45,7 @@ struct LevelScreen: View {
                 Text(areAllLevelsCompleted ? "All levels are completed. Come back later!" : "Level \(nextLevelNumber)")
                     .id(viewId)
                 
-                Text("\(applications.first?._id) \(applications.first?.name) \(applications.first?.token)" as String).padding()
+                Text("\(results.first?.id) \(results.first?.name) \(results.first?.token)" as String).padding()
                     .navigationBarBackButtonHidden(true)
                     .navigationBarTitle("Levels", displayMode: .inline)
                     .navigationBarItems(
@@ -77,7 +77,7 @@ struct LevelScreen: View {
                 })
                 
                 NavigationLink(
-                    destination: PlayableScreen(levelIndex: nextLevelIndex, levelList: levels)
+                    destination: PlayableScreen(levelIndex: nextLevelIndex, levelList: levels, application: results.first!)
                         .navigationBarItems(
                             trailing: Button(
                                 action: {

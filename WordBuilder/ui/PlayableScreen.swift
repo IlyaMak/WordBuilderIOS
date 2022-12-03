@@ -26,13 +26,17 @@ struct PlayableScreen: View {
     @State var currentLevelIndex: Int
     @State private var showLevelView = false
     @State private var showLeaderboardView = false
+    @State private var showErrorAlert = false
     @ObservedObject var levelModel: LevelModel = LevelModel()
+    @ObservedResults(LevelCompleted.self) var results
     var levels: [Level] = []
+    var application: Application? = nil
     
-    init(levelIndex: Int, levelList: [Level]) {
+    init(levelIndex: Int, levelList: [Level], application: Application) {
         _currentLevelIndex = State(initialValue: levelIndex)
         levels = levelList
         initLevel(levelIndex: currentLevelIndex, levelList: levelList)
+        self.application = application
     }
     
     func initLevel(levelIndex: Int, levelList: [Level]) {
@@ -63,12 +67,26 @@ struct PlayableScreen: View {
                 
                 if(guessedWordIndices.count == words.count) {
                     let realm = try! Realm()
+                    
                     let levelCompleted = LevelCompleted()
+                    let id = (realm.objects(LevelCompleted.self).max(ofProperty: "id") as Int? ?? 0) + 1
+                    levelCompleted.id = id
+                    
                     levelCompleted.levelId = levels[currentLevelIndex].id
                     try! realm.write {
                         realm.add(levelCompleted)
                     }
-                    print(realm.objects(LevelCompleted.self))
+                    
+                    Network.createPostRequest(
+                        endpoint: Endpoints.levelsCompleted,
+                        application: application!,
+                        parameters: Array(results.elements.map{$0.levelId}),
+                        onSuccess: {_ in
+                           
+                    }, onError: {
+                        self.showErrorAlert.toggle()
+                    }
+                    )
                 }
             }
         }
@@ -168,17 +186,14 @@ struct PlayableScreen: View {
                     }
                 )
                 .opacity(guessedWordIndices.count == words.count ? 1 : 0)
+                .alert(isPresented: $showErrorAlert) {
+                    Alert(title: Text("Server error"),
+                          message: Text("Please, go to back screen and play level again"),
+                          dismissButton: .default(Text("OK")))
+                }
                 
                 getLetterPicker()
                     .navigationBarTitle("Level \(levels.count == 0 ? 0 : levels[currentLevelIndex].number)", displayMode: .inline)
             }
     }
 }
-
-//struct PlayableScreen_Previews: PreviewProvider {
-//    static var currentLevelIndex = 0
-//
-//    static var previews: some View {
-//        PlayableScreen(levelIndex: currentLevelIndex)
-//    }
-//}
