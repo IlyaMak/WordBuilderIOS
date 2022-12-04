@@ -14,13 +14,13 @@ struct LeaderboardScreen: View {
     var body: some View {
         NavigationView {
             VStack {
-                List(leaders) { leader in
+                List(leaders.indices, id: \.self) { index in
                     VStack {
                         HStack {
-                            Text("\(leader.id)").bold()
-                            Text(leader.name)
+                            Text("\(index + 1)").bold()
+                            Text(leaders[index].name)
                         }
-                        Text("\(leader.amountOfWords)")
+                        Text("\(leaders[index].amountOfWords)")
                     }
                     .frame(width: 280, alignment: .leading)
                     .padding()
