@@ -6,10 +6,16 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 struct LeaderboardScreen: View {
     @State var leaders: [Leader] = []
     @State private var showView = false
+    let application: Application
+    
+    init(application: Application) {
+        self.application = application
+    }
     
     var body: some View {
         NavigationView {
@@ -22,24 +28,21 @@ struct LeaderboardScreen: View {
                         }
                         Text("\(leaders[index].amountOfWords)")
                     }
-                    .frame(width: 280, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
-                    .background(Color.yellow)
+                    .background(leaders[index].isHighlighted ? Color.green : Color.purple)
                     .cornerRadius(10)
                 }
                 .onAppear {
-                    Network().getLeaders { (leaders) in
-                        self.leaders = leaders
-                    }
+                    Network().getLeaders(
+                        application: application,
+                        onSuccess: { (leaders) in
+                            self.leaders = leaders
+                        }
+                    )
                 }
                 .navigationBarTitle("Leaderboard", displayMode: .inline)
             }
         }
-    }
-}
-
-struct LeaderboardScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        LeaderboardScreen()
     }
 }

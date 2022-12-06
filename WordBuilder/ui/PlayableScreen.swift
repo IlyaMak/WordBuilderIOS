@@ -24,19 +24,17 @@ struct PlayableScreen: View {
     @State var enteredWord = ""
     @State var guessedWordIndices: Set<Int> = []
     @State var currentLevelIndex: Int
-    @State private var showLevelView = false
-    @State private var showLeaderboardView = false
     @State private var showErrorAlert = false
     @ObservedObject var levelModel: LevelModel = LevelModel()
     @ObservedResults(LevelCompleted.self) var results
     var levels: [Level] = []
-    var application: Application? = nil
+    let application: Application
     
     init(levelIndex: Int, levelList: [Level], application: Application) {
+        self.application = application
         _currentLevelIndex = State(initialValue: levelIndex)
         levels = levelList
         initLevel(levelIndex: currentLevelIndex, levelList: levelList)
-        self.application = application
     }
     
     func initLevel(levelIndex: Int, levelList: [Level]) {
@@ -79,7 +77,7 @@ struct PlayableScreen: View {
                     
                     Network.createPostRequest(
                         endpoint: Endpoints.levelsCompleted,
-                        application: application!,
+                        application: application,
                         parameters: Array(results.elements.map{$0.levelId}),
                         onSuccess: {_ in
                            

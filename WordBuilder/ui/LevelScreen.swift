@@ -12,6 +12,7 @@ struct LevelScreen: View {
     @ObservedResults(Application.self) var results
     @State private var showPlayableView = false
     @State private var showLeaderboardView = false
+    @State private var showSettingsView = false
     @State private var viewId: Int = 0
 //    @StateObject var realmManager = RealmManager()
     
@@ -49,17 +50,32 @@ struct LevelScreen: View {
                     .navigationBarBackButtonHidden(true)
                     .navigationBarTitle("Levels", displayMode: .inline)
                     .navigationBarItems(
-                        trailing: Button(
-                            action: {
-                                self.showLeaderboardView.toggle()
-                            },
-                            label: {
-                                Image(systemName: "crown.fill").foregroundColor(.yellow)
+                        trailing:
+                            HStack {
+                                Button(
+                                    action: {
+                                        self.showLeaderboardView.toggle()
+                                    },
+                                    label: {
+                                        Image(systemName: "crown.fill").foregroundColor(.yellow)
+                                    }
+                                )
+                                .sheet(isPresented: $showLeaderboardView) {
+                                    LeaderboardScreen(application: results.first!)
+                                }
+                                
+                                Button(
+                                    action: {
+                                        self.showSettingsView.toggle()
+                                    },
+                                    label: {
+                                        Image(systemName: "gearshape.fill").foregroundColor(.black)
+                                    }
+                                )
+                                .sheet(isPresented: $showSettingsView) {
+                                    SettingsScreen()
+                                }
                             }
-                        )
-                        .sheet(isPresented: $showLeaderboardView) {
-                            LeaderboardScreen()
-                        }
                     )
                 
                 Button(action: {
@@ -79,20 +95,36 @@ struct LevelScreen: View {
                 NavigationLink(
                     destination: PlayableScreen(levelIndex: nextLevelIndex, levelList: levels, application: results.first!)
                         .navigationBarItems(
-                            trailing: Button(
-                                action: {
-                                    self.showLeaderboardView.toggle()
-                                },
-                                label: {
-                                    Image(systemName: "crown.fill").foregroundColor(.yellow)
+                            trailing:
+                                HStack {
+                                    Button(
+                                        action: {
+                                            self.showLeaderboardView.toggle()
+                                        },
+                                        label: {
+                                            Image(systemName: "crown.fill").foregroundColor(.yellow)
+                                        }
+                                    )
+                                    .sheet(isPresented: $showLeaderboardView) {
+                                        LeaderboardScreen(application: results.first!)
+                                    }
+                                    .onDisappear {
+                                        viewId += 1
+                                    }
+                                    
+                                    Button(
+                                        action: {
+                                            self.showSettingsView.toggle()
+                                        },
+                                        label: {
+                                            Image(systemName: "gearshape.fill").foregroundColor(.black)
+                                        }
+                                    )
+                                    .sheet(isPresented: $showSettingsView) {
+                                        SettingsScreen()
+                                    }
                                 }
-                            )
-                            .sheet(isPresented: $showLeaderboardView) {
-                                LeaderboardScreen()
-                            }
-                            .onDisappear {
-                                viewId += 1
-                            }
+                                
                         ),
                     isActive: $showPlayableView,
                     label: {

@@ -21,22 +21,31 @@ class Network {
         .resume()
     }
     
-    func getLeaders(completions: @escaping ([Leader]) -> ()) {
+    func getLeaders(application: Application, onSuccess: @escaping ([Leader]) -> ()) {
         guard let url = URL(string: Endpoints.getLeaders) else { fatalError("Missing URL") }
         
-        URLSession.shared.dataTask(with: url) { (data, _, _) in
+        var request = URLRequest(url: url)
+        request.addValue(application.token, forHTTPHeaderField: "X-Application-Token")
+        
+        URLSession.shared.dataTask(with: request) { (data, _, _) in
             let decodedLeaders = try! JSONDecoder().decode([Leader].self, from: data!)
             
             DispatchQueue.main.async {
-                completions(decodedLeaders)
+                onSuccess(decodedLeaders)
             }
         }
         .resume()
     }
     
-    //Endpoint, application(need token), parameters(Map), callback, onError(maybe call in catch or else)?
     static func createPostRequest(endpoint: String, application: Application, parameters: Any,  onSuccess: @escaping (Any?) -> (), onError: @escaping () -> ()) {
-//        let parameters: [String: Any] = ["name": application.name]
+        makeRequest(httpMethod: "POST", endpoint: endpoint, application: application, onSuccess: onSuccess, onError: onError, parameters: parameters)
+    }
+    
+    static func createGetRequest(endpoint: String, application: Application, onSuccess: @escaping (Any?) -> (), onError: @escaping () -> ()) {
+        makeRequest(httpMethod: "GET", endpoint: endpoint, application: application, onSuccess: onSuccess, onError: onError)
+    }
+    
+    static func makeRequest(httpMethod: String, endpoint: String, application: Application,  onSuccess: @escaping (Any?) -> (), onError: @escaping () -> (), parameters: Any? = nil) {
         guard let url = URL(string: endpoint) else {
             print("err url")
             return onError()
@@ -47,19 +56,21 @@ class Network {
         
         // now create the URLRequest object using the url object
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        request.httpMethod = httpMethod
         
         // add headers for the request
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(application.token, forHTTPHeaderField: "X-Application-Token")
         
-        do {
-          // convert parameters to Data and assign dictionary to httpBody of request
-          request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
-        } catch let error {
-            print("Serialization: " + error.localizedDescription)
-            onError()
+        if parameters != nil {
+            do {
+              // convert parameters to Data and assign dictionary to httpBody of request
+              request.httpBody = try JSONSerialization.data(withJSONObject: parameters!, options: .prettyPrinted)
+            } catch let error {
+                print("Serialization: " + error.localizedDescription)
+                onError()
+            }
         }
         
         // create dataTask using the session object to send data to the server
@@ -92,6 +103,8 @@ class Network {
                 return
             }
             
+            print()
+            print(responseData)
             do {
             // create json object from data or use JSONDecoder to convert to Model stuct
                 if let jsonResponse = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers) as? [String: Any] {
