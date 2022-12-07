@@ -9,14 +9,15 @@ import SwiftUI
 import RealmSwift
 
 struct LevelScreen: View {
+    @AppStorage("isDarkMode") public var isDark = false
     @ObservedResults(Application.self) var results
     @State private var showPlayableView = false
     @State private var showLeaderboardView = false
     @State private var showSettingsView = false
     @State private var viewId: Int = 0
-//    @StateObject var realmManager = RealmManager()
     
     var body: some View {
+        
         let realm = try! Realm()
         var levels: [Level] = []
         realm.objects(Level.self).forEach { level in
@@ -60,6 +61,7 @@ struct LevelScreen: View {
                                         Image(systemName: "crown.fill").foregroundColor(.yellow)
                                     }
                                 )
+                                .padding(.horizontal, 20)
                                 .sheet(isPresented: $showLeaderboardView) {
                                     LeaderboardScreen(application: results.first!)
                                 }
@@ -69,7 +71,7 @@ struct LevelScreen: View {
                                         self.showSettingsView.toggle()
                                     },
                                     label: {
-                                        Image(systemName: "gearshape.fill").foregroundColor(.black)
+                                        Image(systemName: "gearshape.fill").foregroundColor(isDark ? .white : .black)
                                     }
                                 )
                                 .sheet(isPresented: $showSettingsView) {
@@ -105,6 +107,7 @@ struct LevelScreen: View {
                                             Image(systemName: "crown.fill").foregroundColor(.yellow)
                                         }
                                     )
+                                    .padding(.horizontal, 20)
                                     .sheet(isPresented: $showLeaderboardView) {
                                         LeaderboardScreen(application: results.first!)
                                     }
@@ -117,7 +120,7 @@ struct LevelScreen: View {
                                             self.showSettingsView.toggle()
                                         },
                                         label: {
-                                            Image(systemName: "gearshape.fill").foregroundColor(.black)
+                                            Image(systemName: "gearshape.fill").foregroundColor(isDark ? .white : .black)
                                         }
                                     )
                                     .sheet(isPresented: $showSettingsView) {
@@ -133,6 +136,7 @@ struct LevelScreen: View {
                 )
             }
         }
+        .preferredColorScheme(isDark ? .dark : .light)
     }
 }
 

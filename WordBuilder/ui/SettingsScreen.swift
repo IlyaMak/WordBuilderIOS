@@ -8,18 +8,21 @@
 import SwiftUI
 
 struct SettingsScreen: View {
-    @State var colorThemes = ["light", "dark"]
-    @State var selectedItem = "light"
+    @AppStorage("isDarkMode") public var isDark = false
     
     var body: some View {
         VStack {
-            Picker("Themes", selection: $selectedItem) {
-                ForEach(colorThemes, id: \.self) { item in
-                    Text(item)
+            Button(
+                action: {
+                    isDark.toggle()
+                },
+                label: {
+                    isDark ? Label("Dark theme", systemImage: "lightbulb.fill") : Label("Light theme", systemImage: "lightbulb")
                 }
-            }
-            .pickerStyle(MenuPickerStyle())
+            )
+            .padding(.vertical, 30)
         }
+        .preferredColorScheme(isDark ? .dark : .light)
         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
     }
 }

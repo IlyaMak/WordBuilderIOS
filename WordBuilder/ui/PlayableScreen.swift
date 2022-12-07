@@ -16,6 +16,7 @@ class LevelModel: ObservableObject {
 }
 
 struct PlayableScreen: View {
+    @AppStorage("isDarkMode") public var isDark = false
     let maxNumberOfLettersPerRow = 4
     let maxNumberOfRows = 2
     let minNumberOfRows = 1
@@ -149,7 +150,14 @@ struct PlayableScreen: View {
                                 .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
                                 .cornerRadius(3)
                                 .frame(width: 50, height: 50)
-                                .overlay(Text(!guessedWordIndices.contains(wordIndex) ? "" : "\(letter.uppercased())" as String))
+                                .overlay(
+                                    Text(
+                                        !guessedWordIndices.contains(wordIndex)
+                                            ? ""
+                                            : "\(letter.uppercased())" as String
+                                    )
+                                    .foregroundColor(Color.black)
+                                )
                         }
                     }
                 }
@@ -160,8 +168,7 @@ struct PlayableScreen: View {
                             enteredWord.removeLast()
                         },
                         label: {
-                            Image(systemName: "delete.left")
-                                .foregroundColor(.black)
+                            Image(systemName: "delete.left").foregroundColor(isDark ? .white : .black)
                         }
                     )
                     .opacity(enteredWord == "" ? 0 : 1)

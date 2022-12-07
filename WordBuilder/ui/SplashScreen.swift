@@ -12,6 +12,7 @@ struct SplashScreen: View {
     @State var levels: [Level] = []
     @State private var isActive = false
     var applications: Results<Application>? = nil
+    @AppStorage("isDarkMode") public var isDark = false
     
     init() {
         //check if all api levels equals to realm levels - not save
@@ -36,6 +37,7 @@ struct SplashScreen: View {
             }
         } else {
             Text("Loading...")
+                .preferredColorScheme(isDark ? .dark : .light)
                 .onAppear {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         self.isActive = true

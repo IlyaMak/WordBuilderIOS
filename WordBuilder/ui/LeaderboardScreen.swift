@@ -9,6 +9,7 @@ import SwiftUI
 import RealmSwift
 
 struct LeaderboardScreen: View {
+    @AppStorage("isDarkMode") public var isDark = false
     @State var leaders: [Leader] = []
     @State private var showView = false
     let application: Application
@@ -44,5 +45,6 @@ struct LeaderboardScreen: View {
                 .navigationBarTitle("Leaderboard", displayMode: .inline)
             }
         }
+        .preferredColorScheme(isDark ? .dark : .light)
     }
 }
