@@ -17,6 +17,8 @@ class LevelModel: ObservableObject {
 
 struct PlayableScreen: View {
     @AppStorage("isDarkMode") public var isDark = false
+    @AppStorage("language")
+    private var language = LocalizationService.shared.language
     let maxNumberOfLettersPerRow = 4
     let maxNumberOfRows = 2
     let minNumberOfRows = 1
@@ -198,7 +200,7 @@ struct PlayableScreen: View {
                 }
                 
                 getLetterPicker()
-                    .navigationBarTitle("Level \(levels.count == 0 ? 0 : levels[currentLevelIndex].number)", displayMode: .inline)
+                    .navigationBarTitle("level_screen_level_number".localized(language) + String(levels.count == 0 ? 0 : levels[currentLevelIndex].number), displayMode: .inline)
             }
     }
 }

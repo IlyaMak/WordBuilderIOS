@@ -10,6 +10,8 @@ import RealmSwift
 
 struct LevelScreen: View {
     @AppStorage("isDarkMode") public var isDark = false
+    @AppStorage("language")
+    private var language = LocalizationService.shared.language
     @ObservedResults(Application.self) var results
     @State private var showPlayableView = false
     @State private var showLeaderboardView = false
@@ -44,12 +46,12 @@ struct LevelScreen: View {
         
         return NavigationView {
             VStack {
-                Text(areAllLevelsCompleted ? "All levels are completed. Come back later!" : "Level \(nextLevelNumber)")
+                Text(areAllLevelsCompleted ? "level_screen_if_all_levels_are_completed".localized(language) : "level_screen_level_number".localized(language) + String(nextLevelNumber))
                     .id(viewId)
                 
                 Text("\(results.first?.id) \(results.first?.name) \(results.first?.token)" as String).padding()
                     .navigationBarBackButtonHidden(true)
-                    .navigationBarTitle("Levels", displayMode: .inline)
+                    .navigationBarTitle("level_screen_title".localized(language), displayMode: .inline)
                     .navigationBarItems(
                         trailing:
                             HStack {
