@@ -19,7 +19,7 @@ struct PlayableScreen: View {
     @AppStorage("isDarkMode") public var isDark = false
     @AppStorage("language")
     private var language = LocalizationService.shared.language
-    let maxNumberOfLettersPerRow = 4
+    let maxNumberOfLettersPerRow = 8
     let maxNumberOfRows = 2
     let minNumberOfRows = 1
     let maxWordLengthMinValue = 5
@@ -45,7 +45,7 @@ struct PlayableScreen: View {
         let arrayLetters = words.joined().map{String($0)}
         let letters = NSOrderedSet(array: arrayLetters.shuffled()).array as! [String]
         var maxWordLength = words.reduce("", { (value, element) in
-                                        element.count > value.count ? value : element}).count
+                                        element.count > value.count ? element : value}).count
         maxWordLength = maxWordLength < maxWordLengthMinValue ? maxWordLengthMinValue : maxWordLength
         
         levelModel.words = words
@@ -95,28 +95,23 @@ struct PlayableScreen: View {
     
     func getLetterPicker() -> some View {
         let letters = levelModel.letters
-        
         let numberOfRows = letters.count > maxNumberOfLettersPerRow ? maxNumberOfRows : minNumberOfRows
-        return ForEach(Array(arrayLiteral: numberOfRows), id: \.self) { index in
+
+        return VStack {
+            ForEach(0...(numberOfRows - 1), id: \.self) { index in
+                let rowLetters = index == 0
+                    ? letters[0...(numberOfRows == 1 ? letters.count - 1 : Int(ceil(Double(letters.count) / 2)) - 1)]
+                    : letters[Int(ceil(Double(letters.count) / 2))...(letters.count - 1)]
+                    
                 HStack {
-//                    (index == 0
-//                    ? letters[0...numberOfRows == 1 ? 0 : ceil(letters.count / 2)]
-//                    : letters[(letters.count / 2)...letters.count]).map {
-//                            (letter) -> String in
-//                    let a = letters[0...Int(ceil(Double((letters.count / 2))))].map({$0})
-                    
-//                    let letterSliceForFirstIndex = numberOfRows == 1 ? 0 : Int(ceil(Double(letters.count / 2)))
-//                    let elementsInRows = (index == 0 ? letters[0...letterSliceForFirstIndex] : letters[Int(ceil(Double((letters.count) / 2)))...letters.count - 1])
-//                    Text("\(elementsInRows)" as String).fontWeight(.bold)
-                    
-                    ForEach(letters, id: \.self) { letter in
+                    ForEach(rowLetters, id: \.self) { letter in
                         Button(
                             action: {
                                 handleLetterButtonPressed(letter: letter)
                             },
                             label: {
                                 Text("\(letter)".uppercased())
-                                    .font(.headline)
+                                    .font(.system(size: CGFloat(getFontSizeBasedOnScreenWidth())))
                                     .foregroundColor(.white)
                                     .padding()
                                     .background(
@@ -129,6 +124,7 @@ struct PlayableScreen: View {
                     }
                 }
             }
+        }
     }
     
     func goToNextLevel() {
@@ -140,8 +136,13 @@ struct PlayableScreen: View {
         }
     }
     
+    func getFontSizeBasedOnScreenWidth() -> Double {
+        return Double(UIScreen.main.bounds.size.width * 0.07)
+    }
+    
     var body: some View {
         let words = levelModel.words
+        let maxWordLength = levelModel.maxWordsLength
         
             return VStack {
                 ForEach(words.indices, id: \.self) { wordIndex in
@@ -151,7 +152,7 @@ struct PlayableScreen: View {
                                 .foregroundColor(.white)
                                 .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
                                 .cornerRadius(3)
-                                .frame(width: 50, height: 50)
+                                .frame(width: UIScreen.main.bounds.size.width * 0.75 / CGFloat(maxWordLength), height: UIScreen.main.bounds.size.width * 0.75 / CGFloat(maxWordLength))
                                 .overlay(
                                     Text(
                                         !guessedWordIndices.contains(wordIndex)
@@ -159,15 +160,20 @@ struct PlayableScreen: View {
                                             : "\(letter.uppercased())" as String
                                     )
                                     .foregroundColor(Color.black)
+                                    .font(.system(size: CGFloat(getFontSizeBasedOnScreenWidth())))
                                 )
                         }
                     }
                 }
                 HStack {
-                    Text(enteredWord.uppercased()).fontWeight(.bold)
+                    //empty space is required for constant height
+                    Text(enteredWord.isEmpty ? " " : enteredWord.uppercased()).fontWeight(.bold)
+
                     Button(
                         action: {
-                            enteredWord.removeLast()
+                            if(!enteredWord.isEmpty) {
+                                enteredWord.removeLast()
+                            }
                         },
                         label: {
                             Image(systemName: "delete.left").foregroundColor(isDark ? .white : .black)

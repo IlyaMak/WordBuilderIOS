@@ -48,8 +48,7 @@ struct LevelScreen: View {
             VStack {
                 Text(areAllLevelsCompleted ? "level_screen_if_all_levels_are_completed".localized(language) : "level_screen_level_number".localized(language) + String(nextLevelNumber))
                     .id(viewId)
-                
-                Text("\(results.first?.id) \(results.first?.name) \(results.first?.token)" as String).padding()
+                    .padding()
                     .navigationBarBackButtonHidden(true)
                     .navigationBarTitle("level_screen_title".localized(language), displayMode: .inline)
                     .navigationBarItems(
