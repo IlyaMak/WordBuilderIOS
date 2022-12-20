@@ -4,25 +4,23 @@ PODS:
   - Realm/Headers (10.25.2)
   - RealmSwift (10.25.2):
     - Realm (= 10.25.2)
-  - SQLite.swift (0.13.3):
-    - SQLite.swift/standard (= 0.13.3)
-  - SQLite.swift/standard (0.13.3)
+  - SwiftLint (0.50.3)
 
 DEPENDENCIES:
   - RealmSwift (~> 10.25.2)
-  - SQLite.swift (~> 0.13.3)
+  - SwiftLint
 
 SPEC REPOS:
   trunk:
     - Realm
     - RealmSwift
-    - SQLite.swift
+    - SwiftLint
 
 SPEC CHECKSUMS:
   Realm: 978303663d0509166498f423d112e5ee97d4c91b
   RealmSwift: a0c30c1efc49e928a0a6f8fb141bb2629616d79b
-  SQLite.swift: 903bfa3bc9ab06345fdfbb578e34f47cfcf417da
+  SwiftLint: 77f7cb2b9bb81ab4a12fcc86448ba3f11afa50c6
 
-PODFILE CHECKSUM: 4b42e9219d63759710b73dfb8db35db6b9445030
+PODFILE CHECKSUM: 8c099e64a2054f95d13264c56c2613999d2fc56c
 
 COCOAPODS: 1.11.3

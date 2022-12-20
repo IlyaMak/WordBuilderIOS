@@ -6,8 +6,8 @@ target 'WordBuilder' do
   use_frameworks!
 
   # Pods for WordBuilder
-    pod 'SQLite.swift', '~> 0.13.3'
     pod 'RealmSwift', '~> 10.25.2'
+    pod 'SwiftLint'
 
   target 'WordBuilderTests' do
     inherit! :search_paths

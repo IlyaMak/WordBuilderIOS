@@ -417,11 +417,11 @@ Prohibited Jurisdiction, or otherwise in violation of any such restrictions or
 regulations.
 
 
-## SQLite.swift
+## SwiftLint
 
-(The MIT License)
+The MIT License (MIT)
 
-Copyright (c) 2014-2015 Stephen Celis (<stephen@stephencelis.com>)
+Copyright (c) 2020 Realm Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
