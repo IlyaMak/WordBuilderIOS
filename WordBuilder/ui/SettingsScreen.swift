@@ -22,7 +22,6 @@ struct SettingsScreen: View {
                     isDark ? Label("settings_dark_theme_label".localized(language), systemImage: "lightbulb.fill") : Label("settings_light_theme_label".localized(language), systemImage: "lightbulb")
                 }
             )
-            
             .padding(.vertical, 30)
             
             Menu {

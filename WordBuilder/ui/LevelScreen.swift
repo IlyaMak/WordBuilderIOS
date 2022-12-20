@@ -47,6 +47,8 @@ struct LevelScreen: View {
         return NavigationView {
             VStack {
                 Text(areAllLevelsCompleted ? "level_screen_if_all_levels_are_completed".localized(language) : "level_screen_level_number".localized(language) + String(nextLevelNumber))
+                    .foregroundColor(.purple)
+                    .font(.system(size: 28))
                     .id(viewId)
                     .padding()
                     .navigationBarBackButtonHidden(true)
@@ -94,6 +96,7 @@ struct LevelScreen: View {
                                 .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                         )
                 })
+                .opacity(areAllLevelsCompleted ? 0 : 1)
                 
                 NavigationLink(
                     destination: PlayableScreen(levelIndex: nextLevelIndex, levelList: levels, application: results.first!)

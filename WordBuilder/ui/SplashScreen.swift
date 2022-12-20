@@ -39,6 +39,8 @@ struct SplashScreen: View {
             }
         } else {
             Text("splash_screen_label".localized(language))
+                .foregroundColor(.purple)
+                .font(.system(size: 28))
                 .preferredColorScheme(isDark ? .dark : .light)
                 .onAppear {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {

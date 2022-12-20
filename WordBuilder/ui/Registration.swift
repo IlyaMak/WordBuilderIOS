@@ -20,6 +20,7 @@ struct Registration: View {
         NavigationView {
             VStack {
                 Text("Hello \(name)")
+                    .foregroundColor(.purple)
                 TextField("Enter your name", text:$name)
                     .textFieldStyle(RoundedBorderTextFieldStyle()).padding()
                         
@@ -28,7 +29,7 @@ struct Registration: View {
                         let application = Application()
                         application.name = name
                         
-                        if(name.count < 3) {
+                        if(name.count < 3 || name.count > 30) {
                             self.showErrorAlert.toggle()
                             self.isNameShort.toggle()
                             return
@@ -61,7 +62,7 @@ struct Registration: View {
                     .alert(isPresented: $showErrorAlert) {
                         if isNameShort {
                             return Alert(title: Text("Short name"),
-                                         message: Text("Your lenght name should be more than 3"),
+                                         message: Text("Your lenght name should be more than 3 or less than 30"),
                                          dismissButton: .default(Text("OK")))
                         } else {
                             return Alert(title: Text("Server error"),
